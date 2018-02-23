@@ -1,0 +1,16 @@
+*.pyc
+*.pyo
+*~
+
+venv/
+.venv/
+
+.vscode/
+
+.DS_Store
+
+# QML
+*.qmlc
+
+# Python lib
+__pycache__
