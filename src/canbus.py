@@ -69,6 +69,7 @@ class CanBus(QObject):
             callback.call([QJSValue(can_id), QJSValue(data)])
         else:
             can_id = hex(msg.arbitration_id)
-            data = str(codecs.encode(msg.data, 'hex_codec'))
+            #data = str(codecs.encode(msg.data, 'hex_codec'))
+            data = ' '.join(format(byte, 'x').zfill(2).upper() for byte in msg.data)
 
             callback.call([QJSValue(can_id), QJSValue(data)])
