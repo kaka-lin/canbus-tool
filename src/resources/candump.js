@@ -1,5 +1,5 @@
 WorkerScript.onMessage = function(msg) {
-    var data = {'can_id': msg.can_id, 'can_data': msg.can_data};
+    var data = {'time': msg.time, 'can_id': msg.can_id, 'dlc': msg.dlc, 'data': msg.data};
     msg.model.append(data);
     msg.model.sync();
 }

@@ -18,21 +18,39 @@ Rectangle {
         }
 
         TableViewColumn {
+            id: timeColumn
+            title: "Time"
+            role: "time"
+            movable: false
+            resizable: false
+            width: tableView.viewport.width / 4
+        }
+
+        TableViewColumn {
             id: canidColumn
             title: "CAN ID"
             role: "can_id"
             movable: false
             resizable: false
-            width: tableView.viewport.width / 3
+            width: tableView.viewport.width / 4
+        }
+
+        TableViewColumn {
+            id: dlcColumn
+            title: "DLC"
+            role: "dlc"
+            movable: false
+            resizable: false
+            width: tableView.viewport.width / 4
         }
 
         TableViewColumn {
             id: dataColumn
             title: "DATA"
-            role: "can_data"
+            role: "data"
             movable: false
             resizable: false
-            width: tableView.viewport.width - canidColumn.width
+            width: tableView.viewport.width / 4
         }
 
         model: listModel
@@ -51,9 +69,9 @@ Rectangle {
             triggeredOnStart: true
 
             onTriggered: {
-                canbus.dump(function(can_id, can_data) {
+                canbus.dump(function(time, can_id, dlc, data) {
                     if (can_id != '') {
-                        var msg = {'can_id': can_id, 'can_data': can_data, 'model': listModel};
+                        var msg = {'time': time, 'can_id': can_id, 'dlc': dlc, 'data': data, 'model': listModel};
                         worker.sendMessage(msg);
                     }
                 })

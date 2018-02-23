@@ -62,14 +62,16 @@ class CanBus(QObject):
 
     @pyqtSlot('QJSValue')
     def dump(self, callback):
-        msg = self.recv(1.0)
-        can_id, data = '', ''
+        msg = self.recv(0.1)
+        time, can_id, dlc, data = '', '', '', ''
 
         if msg is None:
-            callback.call([QJSValue(can_id), QJSValue(data)])
+            callback.call([QJSValue(time), QJSValue(can_id), QJSValue(dlc), QJSValue(data)])
         else:
+            timestamp = msg.timestamp
+            time = datetime.datetime.fromtimestamp(timestamp).strftime('%H:%M:%S')
             can_id = hex(msg.arbitration_id)
-            #data = str(codecs.encode(msg.data, 'hex_codec'))
+            dlc = str(msg.dlc).zfill(2)
             data = ' '.join(format(byte, 'x').zfill(2).upper() for byte in msg.data)
 
-            callback.call([QJSValue(can_id), QJSValue(data)])
+            callback.call([QJSValue(time), QJSValue(can_id), QJSValue(dlc), QJSValue(data)])
