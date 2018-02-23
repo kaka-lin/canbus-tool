@@ -1,6 +1,7 @@
+import datetime
 import codecs
-import can
 import platform
+import can
 from PyQt5.QtCore import QObject, pyqtProperty, pyqtSignal, pyqtSlot
 from PyQt5.QtQml import QJSValue
 
