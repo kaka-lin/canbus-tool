@@ -38,6 +38,8 @@ class CanBus(QObject):
 
         print(config)
 
+        self.__abort = False
+
 
     def send(self, msg, request=None, timeout=None):
         """ Send CAN message to CAN bus """
