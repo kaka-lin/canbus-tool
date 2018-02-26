@@ -65,16 +65,10 @@ class CanBus(QObject):
 
     @pyqtSlot()
     def dump(self):
-        msg = self.recv(0.1)
-        time, can_id, dlc, data = '', '', '', ''
-
-        if msg is None:
-            self.dumpSig.emit(None, None, None, None)
-        else:
-            for msg in self._can_bus:
-                timestamp = msg.timestamp
-                time = datetime.datetime.fromtimestamp(timestamp).strftime('%H:%M:%S')
-                can_id = hex(msg.arbitration_id)
-                dlc = str(msg.dlc).zfill(2)
-                data = ' '.join(format(byte, 'x').zfill(2).upper() for byte in msg.data)
-                self.dumpSig.emit(time, can_id, dlc, data)
+        for msg in self._can_bus:
+            timestamp = msg.timestamp
+            time = datetime.datetime.fromtimestamp(timestamp).strftime('%H:%M:%S')
+            can_id = hex(msg.arbitration_id)
+            dlc = str(msg.dlc).zfill(2)
+            data = ' '.join(format(byte, 'x').zfill(2).upper() for byte in msg.data)
+            self.dumpSig.emit(time, can_id, dlc, data)

@@ -10,7 +10,6 @@ class CanBusThread(QObject):
 
         self.__threads = None
 
-
     @pyqtSlot()
     def dump(self):
         # CanBus Thread Start
