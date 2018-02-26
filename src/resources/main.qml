@@ -43,7 +43,7 @@ ApplicationWindow {
             spacing: 5
 
             ToolButton {
-                text: qsTr("file")
+                //text: qsTr("file")
                 Image {
                     id: newFileImage
                     source: "images/newFile.ico"
@@ -56,7 +56,7 @@ ApplicationWindow {
             }
 
             ToolButton {
-                text: qsTr("Help")
+                //text: qsTr("Help")
                 Image {
                     id: aboutImage
                     source: "images/about.ico"
@@ -69,7 +69,7 @@ ApplicationWindow {
             }
 
             ToolButton {
-                text: qsTr("Exit")
+                //text: qsTr("Exit")
                 Image {
                     id: exitImage
                     source: "images/exit.ico"
@@ -80,6 +80,21 @@ ApplicationWindow {
                 anchors.verticalCenter: parent.verticalCenter
                 onClicked: {
                     Qt.quit();
+                }
+            }
+
+            ToolButton {
+                //text: qsTr("dump")
+                Image {
+                    id: dumpImage
+                    source: "images/canbus.png"
+                    asynchronous:true
+                    fillMode: Image.PreserveAspectFit
+                    anchors.fill: parent
+                }
+                anchors.verticalCenter: parent.verticalCenter
+                onClicked: {
+                    canbus.dump()
                 }
             }
         }

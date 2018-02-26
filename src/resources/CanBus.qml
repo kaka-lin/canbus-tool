@@ -61,21 +61,17 @@ Rectangle {
             id: worker
             source: "candump.js" // 聲明js處理函數
         }
+    }
 
-        Timer {
-            id: timer
-            interval: 1000; repeat: true
-            running: true
-            triggeredOnStart: true
+    Connections {
+        target: canbus
 
-            onTriggered: {
-                canbus.dump(function(time, can_id, dlc, data) {
-                    if (can_id != '') {
-                        var msg = {'time': time, 'can_id': can_id, 'dlc': dlc, 'data': data, 'model': listModel};
-                        worker.sendMessage(msg);
-                    }
-                })
-            }
+        // Sum signal handler
+        onDumpSig: {
+            console.log(time + ' ' + can_id + ' ' + dlc + ' ' + data)
+            var msg = {'time': time, 'can_id': can_id, 'dlc': dlc, 'data': data, 'model': listModel};
+            worker.sendMessage(msg);
+
         }
     }
 }

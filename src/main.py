@@ -2,7 +2,7 @@ import sys
 from PyQt5.QtCore import QCoreApplication, QUrl, Qt
 from PyQt5.QtGui import QGuiApplication
 from PyQt5.QtQml import QQmlApplicationEngine, QQmlContext
-from src.canbus import CanBus
+from src.thread import CanBusThread
 
 def run(app):
     #QCoreApplication.setAttribute(Qt.AA_EnableHighDpiScaling, True)
@@ -14,7 +14,7 @@ def run(app):
     engine = QQmlApplicationEngine()
     context = engine.rootContext()
 
-    canbus = CanBus()
+    canbus = CanBusThread()
     context.setContextProperty("canbus", canbus)
 
     engine.load(QUrl('src/resources/main.qml'))

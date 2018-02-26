@@ -6,6 +6,8 @@ from PyQt5.QtCore import QObject, pyqtProperty, pyqtSignal, pyqtSlot
 from PyQt5.QtQml import QJSValue
 
 class CanBus(QObject):
+    dumpSig = pyqtSignal(str, str, str, str, arguments=['time', 'can_id', 'dlc', 'data'])
+
     """ CAN Bus configure"""
     def __init__(self, parent=None):
         super(CanBus, self).__init__(parent)
@@ -61,18 +63,18 @@ class CanBus(QObject):
         self.__init__()
         print('------------------- End!!! -------------------')
 
-    @pyqtSlot('QJSValue')
-    def dump(self, callback):
+    @pyqtSlot()
+    def dump(self):
         msg = self.recv(0.1)
         time, can_id, dlc, data = '', '', '', ''
 
         if msg is None:
-            callback.call([QJSValue(time), QJSValue(can_id), QJSValue(dlc), QJSValue(data)])
+            self.dumpSig.emit(None, None, None, None)
         else:
-            timestamp = msg.timestamp
-            time = datetime.datetime.fromtimestamp(timestamp).strftime('%H:%M:%S')
-            can_id = hex(msg.arbitration_id)
-            dlc = str(msg.dlc).zfill(2)
-            data = ' '.join(format(byte, 'x').zfill(2).upper() for byte in msg.data)
-
-            callback.call([QJSValue(time), QJSValue(can_id), QJSValue(dlc), QJSValue(data)])
+            for msg in self._can_bus:
+                timestamp = msg.timestamp
+                time = datetime.datetime.fromtimestamp(timestamp).strftime('%H:%M:%S')
+                can_id = hex(msg.arbitration_id)
+                dlc = str(msg.dlc).zfill(2)
+                data = ' '.join(format(byte, 'x').zfill(2).upper() for byte in msg.data)
+                self.dumpSig.emit(time, can_id, dlc, data)
