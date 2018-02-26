@@ -29,15 +29,17 @@ class CanBus(QObject):
         if config['interface'] == None:
             config = {'interface': 'virtual', 'channel': 'test'}
             self._can_bus = can.interface.Bus('test', bustype='virtual')
+            self.__config = 'virtual'
         elif config['interface'] == 'kvaser':
             self._can_bus = can.interface.Bus(bitrate=bitrate, tseg1=tseg1, tseg2=tseg2, sjw=sjw, **config)
+            self.__config = 'kvaser'
         elif config['interface'] == 'socketcan_native':
             self._can_bus = can.interface.Bus(bitrate=bitrate, **config)
+            self.__config = 'socketcan'
         else:
             self._can_bus = can.interface.Bus(**config)
 
         print(config)
-
         self.__abort = False
 
 
@@ -67,16 +69,28 @@ class CanBus(QObject):
 
     @pyqtSlot()
     def dump(self):
-        for msg in self._can_bus:
-            if self.__abort:
-                break
+        msg = self.recv(1.0)
 
+        if msg is None:
+            """ """
+        else:
             timestamp = msg.timestamp
             time = datetime.datetime.fromtimestamp(timestamp).strftime('%H:%M:%S')
             can_id = hex(msg.arbitration_id)
             dlc = str(msg.dlc).zfill(2)
             data = ' '.join(format(byte, 'x').zfill(2).upper() for byte in msg.data)
             self.dumpSig.emit(time, can_id, dlc, data)
+
+            for msg in self._can_bus:
+                if self.__abort:
+                    break
+
+                timestamp = msg.timestamp
+                time = datetime.datetime.fromtimestamp(timestamp).strftime('%H:%M:%S')
+                can_id = hex(msg.arbitration_id)
+                dlc = str(msg.dlc).zfill(2)
+                data = ' '.join(format(byte, 'x').zfill(2).upper() for byte in msg.data)
+                self.dumpSig.emit(time, can_id, dlc, data)
 
     @pyqtSlot()
     def abort_dump(self):

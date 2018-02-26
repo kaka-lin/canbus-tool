@@ -133,9 +133,10 @@ ApplicationWindow {
         title: "About"
         text: "
                This is CanBus Tool
-               written with QML based on PyQt5\n
-               Version: 0.0.1
-               Date:2018/02/22"
+               written with QML
+               based on PyQt5\n
+               Version: 0.1
+               Date:2018/02/26"
         icon: StandardIcon.Information
     }
 
