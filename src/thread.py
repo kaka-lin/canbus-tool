@@ -21,4 +21,12 @@ class CanBusThread(QObject):
 
         worker.dumpSig.connect(self.dumpSig)
         thread.started.connect(worker.dump)
+
         thread.start()
+
+    @pyqtSlot()
+    def abortDump(self):
+        for thread, worker in self.__threads:
+            worker.abort_dump()
+            thread.quit()
+            thread.wait() # you need to wait for it to *actually* quit

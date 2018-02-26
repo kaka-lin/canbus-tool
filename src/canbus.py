@@ -66,9 +66,16 @@ class CanBus(QObject):
     @pyqtSlot()
     def dump(self):
         for msg in self._can_bus:
+            if self.__abort:
+                break
+
             timestamp = msg.timestamp
             time = datetime.datetime.fromtimestamp(timestamp).strftime('%H:%M:%S')
             can_id = hex(msg.arbitration_id)
             dlc = str(msg.dlc).zfill(2)
             data = ' '.join(format(byte, 'x').zfill(2).upper() for byte in msg.data)
             self.dumpSig.emit(time, can_id, dlc, data)
+
+    @pyqtSlot()
+    def abort_dump(self):
+        self.__abort = True

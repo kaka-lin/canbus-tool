@@ -6,6 +6,7 @@ import QtQuick.Controls.Universal 2.0
 import Qt.labs.settings 1.0 // QSettings的QML版本,只適合保存簡單的key-value
 import QtQuick.Window 2.2
 import QtQuick.Dialogs 1.2
+import QtGraphicalEffects 1.0 // DropShadow
 
 ApplicationWindow {
     id: window
@@ -43,7 +44,6 @@ ApplicationWindow {
             spacing: 5
 
             ToolButton {
-                //text: qsTr("file")
                 Image {
                     id: newFileImage
                     source: "images/newFile.ico"
@@ -56,7 +56,6 @@ ApplicationWindow {
             }
 
             ToolButton {
-                //text: qsTr("Help")
                 Image {
                     id: aboutImage
                     source: "images/about.ico"
@@ -69,7 +68,6 @@ ApplicationWindow {
             }
 
             ToolButton {
-                //text: qsTr("Exit")
                 Image {
                     id: exitImage
                     source: "images/exit.ico"
@@ -84,17 +82,34 @@ ApplicationWindow {
             }
 
             ToolButton {
-                //text: qsTr("dump")
+                id: canbusButton
+                checkable: true
+                checked: false
+                anchors.verticalCenter: parent.verticalCenter
+
                 Image {
                     id: dumpImage
-                    source: "images/canbus.png"
+                    source: canbusButton.checked ? "images/connect.png" : "images/disconnect.png"
                     asynchronous:true
                     fillMode: Image.PreserveAspectFit
                     anchors.fill: parent
                 }
-                anchors.verticalCenter: parent.verticalCenter
+
+                DropShadow {
+                    anchors.fill: dumpImage
+                    horizontalOffset: 3
+                    verticalOffset: 3
+                    samples: 17
+                    color: "#80000000"
+                    source: dumpImage
+                }
+
                 onClicked: {
-                    canbus.dump()
+                    if (checked) {
+                        canbus.dump()
+                    } else {
+                        canbus.abortDump()
+                    }
                 }
             }
         }
