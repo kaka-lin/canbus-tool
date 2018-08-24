@@ -2,8 +2,7 @@ import QtQuick 2.0
 import QtQuick.Controls 1.4
 
 Rectangle {
-    width: parent.width
-    height: 200
+    anchors.fill: parent
 
     TableView {
         id: tableView
@@ -41,7 +40,7 @@ Rectangle {
             role: "dlc"
             movable: false
             resizable: false
-            width: tableView.viewport.width / 4
+            width: tableView.viewport.width / 12
         }
 
         TableViewColumn {
@@ -50,7 +49,7 @@ Rectangle {
             role: "data"
             movable: false
             resizable: false
-            width: tableView.viewport.width / 4
+            width: (tableView.viewport.width / 3) * 2
         }
 
         model: listModel

@@ -7,6 +7,7 @@ from PyQt5.QtQml import QJSValue
 
 class CanBus(QObject):
     dumpSig = pyqtSignal(str, str, str, str, arguments=['time', 'can_id', 'dlc', 'data'])
+    dumpDone = pyqtSignal()
 
     """ CAN Bus configure"""
     def __init__(self, parent=None):
@@ -69,28 +70,35 @@ class CanBus(QObject):
 
     @pyqtSlot()
     def dump(self):
-        msg = self.recv(1.0)
+        while True:
+            if self.__abort:
+                break
 
-        if msg is None:
-            """ """
-        else:
-            timestamp = msg.timestamp
-            time = datetime.datetime.fromtimestamp(timestamp).strftime('%H:%M:%S')
-            can_id = hex(msg.arbitration_id)
-            dlc = str(msg.dlc).zfill(2)
-            data = ' '.join(format(byte, 'x').zfill(2).upper() for byte in msg.data)
-            self.dumpSig.emit(time, can_id, dlc, data)
-
-            for msg in self._can_bus:
-                if self.__abort:
-                    break
-
+            msg = self.recv(0.5)
+            if msg is None:
+                continue
+            else:
                 timestamp = msg.timestamp
                 time = datetime.datetime.fromtimestamp(timestamp).strftime('%H:%M:%S')
                 can_id = hex(msg.arbitration_id)
                 dlc = str(msg.dlc).zfill(2)
-                data = ' '.join(format(byte, 'x').zfill(2).upper() for byte in msg.data)
+                data = ' '.join(format(byte, 'x').zfill(2).upper()
+                                for byte in msg.data)
                 self.dumpSig.emit(time, can_id, dlc, data)
+
+                for msg in self._can_bus:
+                    if self.__abort:
+                        break
+                    timestamp = msg.timestamp
+                    time = datetime.datetime.fromtimestamp(
+                        timestamp).strftime('%H:%M:%S')
+                    can_id = hex(msg.arbitration_id)
+                    dlc = str(msg.dlc).zfill(2)
+                    data = ' '.join(format(byte, 'x').zfill(2).upper()
+                                    for byte in msg.data)
+                    self.dumpSig.emit(time, can_id, dlc, data)
+
+        self.dumpDone.emit()
 
     @pyqtSlot()
     def abort_dump(self):

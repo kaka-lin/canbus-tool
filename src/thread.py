@@ -4,6 +4,7 @@ from src.canbus import CanBus
 
 class CanBusThread(QObject):
     dumpSig = pyqtSignal(str, str, str, str, arguments=['time', 'can_id', 'dlc', 'data'])
+    dumpInit = pyqtSignal()
 
     def __init__(self, parent=None):
         super(CanBusThread, self).__init__(parent)
@@ -12,7 +13,9 @@ class CanBusThread(QObject):
 
     @pyqtSlot()
     def dump(self):
-        # CanBus Thread Start
+        """ CanBus Thread Start """
+        self.dumpInit.emit()
+
         self.__threads = []
         worker = CanBus()
         thread = QtCore.QThread(self)
@@ -20,6 +23,7 @@ class CanBusThread(QObject):
         worker.moveToThread(thread)
 
         worker.dumpSig.connect(self.dumpSig)
+        worker.dumpDone.connect(self.dumpDone)
         thread.started.connect(worker.dump)
 
         thread.start()
@@ -28,5 +32,10 @@ class CanBusThread(QObject):
     def abortDump(self):
         for thread, worker in self.__threads:
             worker.abort_dump()
+
+    @pyqtSlot()
+    def dumpDone(self):
+        for thread, worker in self.__threads:
             thread.quit()
-            thread.wait() # you need to wait for it to *actually* quit
+            thread.wait()
+        print("Dump Thread Finished")
