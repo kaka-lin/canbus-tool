@@ -20,6 +20,14 @@ class CanBus(QObject):
                     '~/.canrc',
                 ]
             )
+        elif platform.system() == 'Linux':
+            can.util.CONFIG_FILES.extend(
+                [
+                    '~/can.conf',
+                    '$HOME/.canrc',
+                ]
+
+            )
 
         config = can.util.load_config()
         bitrate = 125000
@@ -35,7 +43,7 @@ class CanBus(QObject):
             self._can_bus = can.interface.Bus(bitrate=bitrate, tseg1=tseg1, tseg2=tseg2, sjw=sjw, **config)
             self.__config = 'kvaser'
         elif config['interface'] == 'socketcan_native':
-            self._can_bus = can.interface.Bus(bitrate=bitrate, **config)
+            self._can_bus = can.interface.Bus(**config)
             self.__config = 'socketcan'
         else:
             self._can_bus = can.interface.Bus(**config)
