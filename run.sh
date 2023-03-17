@@ -8,6 +8,8 @@ docker_run_params=$(cat <<-END
     -v /tmp/.X11-unix:/tmp/.X11-unix \
     -v $PWD:/home/user/canbus-tool \
     -w /home/user/canbus-tool \
+    -v $PWD/can.conf:/home/user/can.conf \
+    --network=host \
     $IMAGE_NAME
 END
 )
