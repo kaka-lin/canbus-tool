@@ -1,15 +1,14 @@
 import sys
+import os
+
 from PyQt5.QtCore import QCoreApplication, QUrl, Qt
 from PyQt5.QtGui import QGuiApplication
 from PyQt5.QtQml import QQmlApplicationEngine, QQmlContext
+
+from src import qml
 from src.thread import CanBusThread
 
-def run(app):
-    #QCoreApplication.setAttribute(Qt.AA_EnableHighDpiScaling, True)
-
-    # Create the application instance.
-    #app = QGuiApplication(sys.argv)
-
+def run(app, root_dir, mode):
     # Create QML engine
     engine = QQmlApplicationEngine()
     context = engine.rootContext()
@@ -17,7 +16,12 @@ def run(app):
     canbus = CanBusThread()
     context.setContextProperty("canbus", canbus)
 
-    engine.load(QUrl('src/resources/main.qml'))
+    if mode == "prod":
+        engine.addImportPath('qrc:/')
+        engine.load(QUrl('qrc:/main.qml'))
+    else:
+        engine.addImportPath(os.path.join(root_dir, "src/resources"))
+        engine.load(QUrl(os.path.join(root_dir, "src/resources/main.qml")))
 
     engine.quit.connect(app.quit)
     sys.exit(app.exec_())

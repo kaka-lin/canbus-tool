@@ -8,6 +8,12 @@ This is canbus tool Implementation with ```PyQt5 + QML```. And it can be used in
 
 Please setup you CAN device.
 
+```sh
+# socketcan setup
+sudo ip link set can0 type can bitrate 500000
+sudo ip link set can0 up
+```
+
 Through Socketcan, after finish setup you can, you will see `can0` show up by `ifconfig -a` as below:
 
 ![](images/can0.png)
@@ -62,3 +68,14 @@ bitrate = <the bitrate in bits/s to use by default>
 ```
 
 Other detail informtation please see [here](https://python-can.readthedocs.io/en/stable/configuration.html).
+
+
+## Packaging
+
+if you want to packing Python programs into ```stand-alone executables```
+
+1. Converting ```*.qrc``` (a collection of resource) files into ```*.py``` (Python source) file
+
+    ```bash
+    $ pyrcc5 -o src/qml.py src/resources/qml.qrc
+    ```

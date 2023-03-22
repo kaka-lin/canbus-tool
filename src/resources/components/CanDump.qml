@@ -1,4 +1,4 @@
-import QtQuick 2.0
+import QtQuick 2.10
 import QtQuick.Controls 1.4
 
 Rectangle {
@@ -58,7 +58,7 @@ Rectangle {
 
         WorkerScript {
             id: worker
-            source: "candump.js" // 聲明js處理函數
+            source: "qrc:/js/candump.js"  // 聲明js處理函數 or "../js/candump.js"
         }
     }
 
@@ -67,10 +67,9 @@ Rectangle {
 
         // Sum signal handler
         onDumpSig: {
-            console.log(time + ' ' + can_id + ' ' + dlc + ' ' + data)
+            console.log(time + ' ' + can_id + ' ' + dlc + ' ' + data);
             var msg = {'time': time, 'can_id': can_id, 'dlc': dlc, 'data': data, 'model': listModel};
             worker.sendMessage(msg);
-
         }
     }
 }

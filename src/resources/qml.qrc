@@ -1,0 +1,22 @@
+<!DOCTYPE RCC><RCC version="0.1">
+    <qresource prefix="/">
+        <file>main.qml</file>
+
+        <file>components/qmldir</file>
+        <file>components/CanDump.qml</file>
+
+        <file>components/common/qmldir</file>
+        <file>components/common/Clock.qml</file>
+
+        <file>images/about.ico</file>
+        <file>images/canbus.png</file>
+        <file>images/connect.png</file>
+        <file>images/disconnect.png</file>
+        <file>images/exit.ico</file>
+        <file>images/light_g.png</file>
+        <file>images/light_r.png</file>
+        <file>images/newFile.ico</file>
+
+        <file>js/candump.js</file>
+    </qresource>
+</RCC>
