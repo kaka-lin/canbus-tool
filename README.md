@@ -1,18 +1,43 @@
 # CanBus Tool
 
-This is canbus tool Implementation with ```PyQt5 + QML```. And it can be used in `Windows(kvaser)` or `Embedded Linux(SocketCAN)`.
+This is a `CAN bus tool` that can send/dump CAN data.
+
+- Frontend: The GUI is implemented with QML.
+- Backend: CAN bus data headling with C/C++ or Python
+
+<img src="images/canbus_tool_0.png">
+
+## Support
+
+CAN Interface:
+
+- [x] kvaser
+- [x] SocketCAN
+- [ ] pcan
+- [ ] virtual
+
+CAN bus data headling (Backend):
+
+- Python: using [python-can](https://github.com/hardbyte/python-can) library
+  - [x] dump
+  - [ ] send
+- C/C++: using [SocketCAN API](https://www.kernel.org/doc/html/latest/networking/can.html) on Linux
+  - [ ] dump
+  - [ ] send
 
 ## Usage
 
 ### 0. Setup your CAN
 
-Please setup you CAN device.
+Please setup your CAN devices. As SocketCAN for example:
 
 ```sh
 # socketcan setup
-sudo ip link set can0 type can bitrate 500000
-sudo ip link set can0 up
+$ sudo ip link set can0 type can bitrate 500000
+$ sudo ip link set can0 up
 ```
+
+> Using SocketCAN support for Kvaser interface please see:[SocketCAN Support for Kvaser Devices](https://github.com/kaka-lin/Notes/tree/master/Network/canbus/kvaser)
 
 Through Socketcan, after finish setup you can, you will see `can0` show up by `ifconfig -a` as below:
 
@@ -37,45 +62,10 @@ $ ./run.sh
 
 Please install Qt/QML on your local machine.
 
-### 2. Install needed Python Packages
+### 2. Choose the backend you want to use it
 
-```bash
-$ pip3 install -r requirements.txt
-```
-### 3. Running the program
+Going to [cpp](./cpp) or [python](./python/) folder and running it by following the related steps in the `README` file.
 
-```bash
-$ python canbus_tool.py
-```
-
-Result as below:
-
-<img src="images/canbus_tool_0.png">
+When you start receiving can data would be like:
 
 <img src="images/canbus_tool_1.png">
-
-## Configuration
-
-If you using `python-can`, you can change configuration by edit `can.conf`.
-
-The configuration files sets the default interface and channel, as below:
-
-```
-[default]
-interface = <the name of the interface to use>
-channel = <the channel to use by default>
-bitrate = <the bitrate in bits/s to use by default>
-```
-
-Other detail informtation please see [here](https://python-can.readthedocs.io/en/stable/configuration.html).
-
-
-## Packaging
-
-if you want to packing Python programs into ```stand-alone executables```
-
-1. Converting ```*.qrc``` (a collection of resource) files into ```*.py``` (Python source) file
-
-    ```bash
-    $ pyrcc5 -o src/qml.py src/resources/qml.qrc
-    ```

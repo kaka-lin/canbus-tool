@@ -20,7 +20,8 @@ if __name__ == "__main__":
         mode = 'prod'
     else:
         # running live
-        root_dir = os.path.dirname(os.path.abspath(sys.argv[0]))
+        root_dir = os.path.dirname(os.path.abspath('.'))
+        print(root_dir)
 
     QCoreApplication.setAttribute(Qt.AA_EnableHighDpiScaling)
     app = QGuiApplication(sys.argv)

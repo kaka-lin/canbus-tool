@@ -20,8 +20,8 @@ def run(app, root_dir, mode):
         engine.addImportPath('qrc:/')
         engine.load(QUrl('qrc:/main.qml'))
     else:
-        engine.addImportPath(os.path.join(root_dir, "src/resources"))
-        engine.load(QUrl(os.path.join(root_dir, "src/resources/main.qml")))
+        engine.addImportPath(os.path.join(root_dir, "frontend"))
+        engine.load(QUrl(os.path.join(root_dir, "frontend/main.qml")))
 
     engine.quit.connect(app.quit)
     sys.exit(app.exec_())
