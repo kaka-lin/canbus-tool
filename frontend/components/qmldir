@@ -1,3 +1,4 @@
 module components
 
 CanDump  1.0  CanDump.qml
+CanSend  1.0  CanSend.qml

@@ -3,7 +3,7 @@
 This is a `CAN bus tool` that can send/dump CAN data.
 
 - Frontend: The GUI is implemented with QML.
-- Backend: CAN bus data headling with C/C++ or Python
+- Backend: CAN bus data headling with C/C++ (Qt) or Python (PyQt)
 
 <img src="images/canbus_tool_0.png">
 
@@ -20,7 +20,7 @@ CAN bus data headling (Backend):
 
 - Python: using [python-can](https://github.com/hardbyte/python-can) library
   - [x] dump
-  - [ ] send
+  - [x] send
 - C/C++: using [SocketCAN API](https://www.kernel.org/doc/html/latest/networking/can.html) on Linux
   - [ ] dump
   - [ ] send
@@ -66,6 +66,6 @@ Please install Qt/QML on your local machine.
 
 Going to [cpp](./cpp) or [python](./python/) folder and running it by following the related steps in the `README` file.
 
-When you start receiving can data would be like:
+When you start sending/receiving can data would be like this:
 
 <img src="images/canbus_tool_1.png">

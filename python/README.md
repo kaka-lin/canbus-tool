@@ -13,7 +13,7 @@ $ pip3 install -r requirements.txt
 $ python canbus_tool.py
 ```
 
-When you start receiving can data would be like:
+When you start sending/receiving can data would be like this:
 
 <img src="../images/canbus_tool_1.png">
 

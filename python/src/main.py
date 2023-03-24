@@ -6,14 +6,14 @@ from PyQt5.QtGui import QGuiApplication
 from PyQt5.QtQml import QQmlApplicationEngine, QQmlContext
 
 from src import qml
-from src.thread import CanBusThread
+from src.threads.can_main_thread import CanMainThread
 
 def run(app, root_dir, mode):
     # Create QML engine
     engine = QQmlApplicationEngine()
     context = engine.rootContext()
 
-    canbus = CanBusThread()
+    canbus = CanMainThread()
     context.setContextProperty("canbus", canbus)
 
     if mode == "prod":

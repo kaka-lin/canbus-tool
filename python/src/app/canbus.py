@@ -1,13 +1,27 @@
 import datetime
 import codecs
 import platform
-import can
-from PyQt5.QtCore import QObject, pyqtProperty, pyqtSignal, pyqtSlot
-from PyQt5.QtQml import QJSValue
 
+from PyQt5.QtCore import QObject
+import can
+
+# class Singleton(type):
+#     """ Singleton metaclass """
+#     _instances = {}
+#     def __call__(cls, *args, **kwargs):
+#         if cls not in cls._instances:
+#             cls._instances[cls] = super(Singleton, cls).__call__(*args, **kwargs)
+#         return cls._instances[cls]
+
+
+# metaclass=Singleton
 class CanBus(QObject):
-    dumpSig = pyqtSignal(str, str, str, str, arguments=['time', 'can_id', 'dlc', 'data'])
-    dumpDone = pyqtSignal()
+    # Singleton
+    _instances = None
+    def __new__(cls, *args, **kwargs):
+        if cls._instances is None:
+            cls._instances = super().__new__(cls)
+        return cls._instances
 
     """ CAN Bus configure"""
     def __init__(self, parent=None):
@@ -35,22 +49,24 @@ class CanBus(QObject):
         tseg2 = 2
         sjw = 2
 
+        self.can_type = ''
+
         if config['interface'] == None:
             config = {'interface': 'virtual', 'channel': 'test'}
             self._can_bus = can.interface.Bus('test', bustype='virtual')
-            self.__config = 'virtual'
+            self.can_type = 'virtual'
         elif config['interface'] == 'kvaser':
             self._can_bus = can.interface.Bus(bitrate=bitrate, tseg1=tseg1, tseg2=tseg2, sjw=sjw, **config)
-            self.__config = 'kvaser'
+            self.can_type = 'kvaser'
         elif config['interface'] == 'socketcan_native':
             self._can_bus = can.interface.Bus(**config)
-            self.__config = 'socketcan'
+            self.can_type = 'socketcan'
         else:
             self._can_bus = can.interface.Bus(**config)
+            self.can_type = config['interface']
 
-        print(config)
-        self.__abort = False
-
+    def state(self):
+        return self._can_bus.state
 
     def send(self, msg, request=None, timeout=None):
         """ Send CAN message to CAN bus """
@@ -59,55 +75,27 @@ class CanBus(QObject):
         except can.CanError as err:
             print(err)
 
-
     def recv(self, timoeout=None):
         """ Receive CAN message from CAN bus """
         return self._can_bus.recv(timoeout)
 
-    @pyqtSlot()
     def shutdown(self):
         """ Shutdown CAN bus """
         self._can_bus.shutdown()
 
-    @pyqtSlot()
     def flush(self):
         print('------------------- flush buffer -------------------')
         self.shutdown()
         self.__init__()
         print('------------------- End!!! -------------------')
 
-    @pyqtSlot()
-    def dump(self):
-        while True:
-            if self.__abort:
-                break
+    def set_filters(self, filters=None):
+        if self.can_type != 'virtual':
+            self._can_bus.set_filters(filters)
 
-            msg = self.recv(0.5)
-            if msg is None:
-                continue
-            else:
-                timestamp = msg.timestamp
-                time = datetime.datetime.fromtimestamp(timestamp).strftime('%H:%M:%S')
-                can_id = hex(msg.arbitration_id)
-                dlc = str(msg.dlc).zfill(2)
-                data = ' '.join(format(byte, 'x').zfill(2).upper()
-                                for byte in msg.data)
-                self.dumpSig.emit(time, can_id, dlc, data)
+    ###########################################################################
 
-                for msg in self._can_bus:
-                    if self.__abort:
-                        break
-                    timestamp = msg.timestamp
-                    time = datetime.datetime.fromtimestamp(
-                        timestamp).strftime('%H:%M:%S')
-                    can_id = hex(msg.arbitration_id)
-                    dlc = str(msg.dlc).zfill(2)
-                    data = ' '.join(format(byte, 'x').zfill(2).upper()
-                                    for byte in msg.data)
-                    self.dumpSig.emit(time, can_id, dlc, data)
-
-        self.dumpDone.emit()
-
-    @pyqtSlot()
-    def abort_dump(self):
-        self.__abort = True
+    def transmit(self, can_id, dlc, data):
+        can_msg = can.Message(
+            arbitration_id=can_id, dlc=dlc, data=data)
+        self.send(can_msg)

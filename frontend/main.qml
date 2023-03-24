@@ -9,7 +9,7 @@ import QtQuick.Dialogs 1.2
 import QtGraphicalEffects 1.0 // DropShadow
 
 import components.common 1.0
-import components 1.0
+import "pages"
 
 ApplicationWindow {
     id: window
@@ -18,8 +18,8 @@ ApplicationWindow {
     //height: Screen.height
     //minimumWidth: 1280
     //minimumHeight: 720
-    width: 640
-    height: 480
+    width: 1280
+    height: 720
 
     title: qsTr("CanBus Tool")
 
@@ -27,6 +27,7 @@ ApplicationWindow {
 
 //////////////////////////////////////////////////////////////////////////
 // menu -> toolBar
+
     header: ToolBar {
         id: menu
 
@@ -150,8 +151,10 @@ ApplicationWindow {
         folder: shortcuts.home
         selectFolder: true
     }
+
 //////////////////////////////////////////////////////////////////////////
-// status -> toolBar
+// footer -> toolBar
+
     footer: ToolBar {
         id: status
 
@@ -189,5 +192,8 @@ ApplicationWindow {
         }
     }
 
-    CanDump {}
+//////////////////////////////////////////////////////////////////////////
+// Page
+
+    CanBusToolPage {}
 }

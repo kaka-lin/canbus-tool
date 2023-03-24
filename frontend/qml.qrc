@@ -4,6 +4,7 @@
 
         <file>components/qmldir</file>
         <file>components/CanDump.qml</file>
+        <file>components/CanSend.qml</file>
 
         <file>components/common/qmldir</file>
         <file>components/common/Clock.qml</file>
