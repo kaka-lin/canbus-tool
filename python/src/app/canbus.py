@@ -18,6 +18,7 @@ import can
 class CanBus(QObject):
     # Singleton
     _instances = None
+
     def __new__(cls, *args, **kwargs):
         if cls._instances is None:
             cls._instances = super().__new__(cls)
@@ -51,8 +52,7 @@ class CanBus(QObject):
 
         self.can_type = ''
 
-        if config['interface'] == None:
-            config = {'interface': 'virtual', 'channel': 'test'}
+        if config['interface'] == 'virtual' or config['interface'] is None:
             self._can_bus = can.interface.Bus('test', bustype='virtual')
             self.can_type = 'virtual'
         elif config['interface'] == 'kvaser':
