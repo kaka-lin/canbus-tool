@@ -24,3 +24,5 @@ Makefile
 
 # CMake
 build/
+
+canbus_tool

@@ -1,4 +1,6 @@
 #include <string.h> // strcpy
+#include <sys/time.h>
+#include <sys/timerfd.h>
 
 #include "canbus.h"
 
@@ -46,8 +48,24 @@ int CanBus::send(const CanFrame& msg) {
   return CanBusStatus::STATUS_OK;
 }
 
-int CanBus::recv(CanFrame& msg) {
+int CanBus::recv(CanFrame& msg, int timeout) {
+  fd_set fds;
+  struct timeval tv;
   struct canfd_frame frame;
+  int ret;
+
+  FD_ZERO(&fds);
+  FD_SET(can_fd_, &fds);
+
+  tv.tv_sec = timeout;
+  tv.tv_usec = 0; // microseconds
+
+  if (timeout != 0) {
+    ret = select(can_fd_ + 1, &fds, NULL, NULL, &tv);
+    if (0 == ret) { // timeout
+      return CanBusStatus::STATUS_READ_TIMEOUT;
+    }
+  }
 
   nbytes_ = read(can_fd_, &frame, sizeof(struct can_frame));
   if (nbytes_ < 0) {

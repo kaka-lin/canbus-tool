@@ -31,6 +31,7 @@ enum CanBusStatus {
   STATUS_BIND_ERROR = 1 << 3,
   STATUS_WRITE_ERROR = 1 << 4,
   STATUS_READ_ERROR = 1 << 5,
+  STATUS_READ_TIMEOUT = 1 << 6
 };
 
 class CanBus {
@@ -40,7 +41,7 @@ class CanBus {
 
   int open(const string can_name="can0");
   int send(const CanFrame& msg);
-  int recv(CanFrame& msg);
+  int recv(CanFrame& msg, int timeout=0);
   int close();
   int canStatus = 0;
 

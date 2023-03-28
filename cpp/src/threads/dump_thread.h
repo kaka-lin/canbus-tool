@@ -33,6 +33,7 @@ private:
   CanBus *can_bus_;
   CanFrame msg_;
   bool __abort = false;
+  int status_;
 };
 
 #endif // DUMP_THREAD_H
