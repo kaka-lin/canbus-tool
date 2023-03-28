@@ -9,8 +9,8 @@ SendThread::SendThread()
 void SendThread::send(const QString &can_id, const QString &dlc,
                       const QString &data)
 {
-  can_id_ = can_id.toUInt(nullptr, 16);
-  dlc_ = dlc.toUInt();
+  can_id_ = can_id.toUInt(nullptr, 16); // std::stoul(can_id, nullptr, 16);
+  dlc_ = dlc.toUInt();                  // int(std::stoul(dlc));
   int data_length = data.length();
   if (data_length / 2 != dlc_) {
     emit sendErrMsg("Data length wrong, please check it");
@@ -19,6 +19,7 @@ void SendThread::send(const QString &can_id, const QString &dlc,
 
   can_data_.reserve(dlc_);
   for (int i = 0; i < data_length; i += 2) {
+    // std::stoul(data.substr(i, 2), nullptr, 16)
     can_data_.push_back(data.mid(i, 2).toUInt(nullptr, 16));
   }
 
@@ -27,4 +28,5 @@ void SendThread::send(const QString &can_id, const QString &dlc,
   msg_.data = can_data_;
   can_bus_->send(msg_);
   emit sendDone();
+  can_data_.clear();
 }
