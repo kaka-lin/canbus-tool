@@ -1,3 +1,6 @@
+# Python lib
+__pycache__
+
 *.pyc
 *.pyo
 *~
@@ -9,6 +12,9 @@ venv/
 
 .DS_Store
 
+# QML
+*.qmlc
+
 # qmake
 .qmake.*
 *.o
@@ -16,8 +22,5 @@ moc_*
 qrc_*
 Makefile
 
-# QML
-*.qmlc
-
-# Python lib
-__pycache__
+# CMake
+build/

@@ -23,7 +23,7 @@ CAN bus data headling (Backend):
   - [x] send
 - C/C++: using [SocketCAN API](https://www.kernel.org/doc/html/latest/networking/can.html) on Linux
   - [ ] dump
-  - [ ] send
+  - [x] send
 
 ## Usage
 

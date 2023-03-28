@@ -9,7 +9,7 @@ import QtQuick.Dialogs 1.2
 import QtGraphicalEffects 1.0 // DropShadow
 
 import components.common 1.0
-import "pages"
+import pages 1.0
 
 ApplicationWindow {
     id: window

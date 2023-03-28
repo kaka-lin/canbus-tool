@@ -9,6 +9,9 @@
         <file>components/common/qmldir</file>
         <file>components/common/Clock.qml</file>
 
+        <file>pages/qmldir</file>
+        <file>pages/CanBusToolPage.qml</file>
+
         <file>images/about.ico</file>
         <file>images/canbus.png</file>
         <file>images/connect.png</file>
