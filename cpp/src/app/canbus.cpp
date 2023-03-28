@@ -45,3 +45,19 @@ int CanBus::send(const CanFrame& msg) {
 
   return CanBusStatus::STATUS_OK;
 }
+
+int CanBus::recv(CanFrame& msg) {
+  struct canfd_frame frame;
+
+  nbytes_ = read(can_fd_, &frame, sizeof(struct can_frame));
+  if (nbytes_ < 0) {
+		perror("Read");
+		return CanBusStatus::STATUS_READ_ERROR;
+	}
+
+  msg.can_id = frame.can_id;
+  msg.can_dlc = frame.len;
+  msg.data.insert(msg.data.begin(), std::begin(frame.data), std::end(frame.data));
+
+  return CanBusStatus::STATUS_OK;
+}

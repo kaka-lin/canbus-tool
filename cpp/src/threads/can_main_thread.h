@@ -16,9 +16,9 @@ public:
   ~CanMainThread();
 
 public slots:
-  // void dump();
-  // void abortDump();
-  // void dumpDone();
+  void dump();
+  void abortDump();
+  void dumpDone();
 
   void send(const QString &can_id,
             const QString &dlc,
@@ -26,12 +26,15 @@ public slots:
   void sendDone();
 
 signals:
-  void dumpSig(const QString &time, const QString &can_id,
-               const QString &dlc, const QString &data);
+  void dumpSig(const QString &time,
+               const QString &can_id,
+               const QString &dlc,
+               const QString &data);
   void dumpInit();
 
 private:
   QMap<QString, QThread *> threads;
+  QMap<QString, QVariant> workers;
 };
 
 #endif // CAN_MAIN_THREAD_H

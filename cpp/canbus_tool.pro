@@ -24,11 +24,14 @@ SOURCES += \
     src/main.cpp \
     src/app/canbus.cpp \
     src/threads/can_main_thread.cpp \
+    src/threads/dump_thread.cpp \
     src/threads/send_thread.cpp
 
 HEADERS += \
+    src/common.h \
     src/app/canbus.h \
     src/threads/can_main_thread.h \
+    src/threads/dump_thread.h \
     src/threads/send_thread.h
 
 RESOURCES += ../frontend/qml.qrc
